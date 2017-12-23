@@ -1,1 +1,1 @@
-worker: python (your bot's file name, for me its bot.py)
+worker: python (shaker.py)
