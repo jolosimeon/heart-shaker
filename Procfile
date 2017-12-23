@@ -1,1 +1,1 @@
-worker: python (shaker.py)
+worker: python shaker.py
