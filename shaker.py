@@ -14,16 +14,16 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content.startswith('//is sana gay?'):
-        print(message.author)
+        print(message.author + ' ' + message.timestamp)
         await client.send_message(message.channel, 'yeah i am so gay', tts=True)
     if message.content.startswith('//aw'):
-        print(message.author)
+        print(message.author + ' ' + message.timestamp)
         await client.send_message(message.channel, 'arvayne weak', tts=True)
     if message.content.startswith('//will'):
-        print(message.author)
+        print(message.author + ' ' + message.timestamp)
         await client.send_message(message.channel, 'kamusta naman', tts=True)
     if message.content.startswith('//jay'):
-        print(message.author)
+        print(message.author + ' ' + message.timestamp)
         await client.send_message(message.channel, 'jaylica likes girls', tts=True)
     #    counter = 0
     #     tmp = await client.send_message(message.channel, 'Calculating messages...')
