@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import os
 
 client = discord.Client()
 
@@ -13,12 +14,16 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content.startswith('//is sana gay?'):
+        print(message.author)
         await client.send_message(message.channel, 'yeah i am so gay', tts=True)
     if message.content.startswith('//aw'):
+        print(message.author)
         await client.send_message(message.channel, 'arvayne weak', tts=True)
     if message.content.startswith('//will'):
+        print(message.author)
         await client.send_message(message.channel, 'kamusta naman', tts=True)
     if message.content.startswith('//jay'):
+        print(message.author)
         await client.send_message(message.channel, 'jaylica likes girls', tts=True)
     #    counter = 0
     #     tmp = await client.send_message(message.channel, 'Calculating messages...')
@@ -31,4 +36,19 @@ async def on_message(message):
     #     await asyncio.sleep(5)
     #     await client.send_message(message.channel, 'Done sleeping')
 
-client.run("MzkzNjk0MTUwNDY3NTE4NDY0.DR5f2Q.E1Ta1yb-PjhzuH0HdAS5wTwg7lY")
+client.run(os.getenv('TOKEN'))
+
+# from discord.ext import commands
+
+# bot = commands.Bot(description="is sana gay", command_prefix="//")
+
+# @bot.command()
+# async def aw():
+#     """This is the command's description.
+#     This can span multiple lines."""
+#     await bot.send_message(message.channel, 'arvayne weak', tts=True)
+# @bot.command()
+# async def say(*, something):
+#     await bot.say(something)
+
+# bot.run("")
