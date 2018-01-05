@@ -24,7 +24,9 @@ async def on_message(message):
     if message.content.startswith('//jay'):
         await client.send_message(message.channel, 'jaylica likes girls', tts=True)
     if message.content.startswith('//john'):
-        await client.send_message(message.channel, 'e show knee wa ow chin chin ow tah bey mas en ka?', tts=True)
+        await client.send_message(message.channel, 'o rey wah... ow chin chin gha dice key nan da yo', tts=True)
+    if message.content.startswith('//kain'):
+        await client.send_message(message.channel, 'kain ano', tts=True)
     #    counter = 0
     #     tmp = await client.send_message(message.channel, 'Calculating messages...')
     #     async for log in client.logs_from(message.channel, limit=100):
