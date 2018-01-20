@@ -25,6 +25,9 @@ async def on_message(message):
     if message.content.startswith('//jay'):
         print(message.author.name + ' ' + str(message.timestamp))
         await client.send_message(message.channel, 'jaylica likes girls', tts=True)
+    if message.content.startswith('//ok'):
+        print(message.author.name + ' ' + str(message.timestamp))
+        await client.send_message(message.channel, 'ok lang', tts=True)
     #    counter = 0
     #     tmp = await client.send_message(message.channel, 'Calculating messages...')
     #     async for log in client.logs_from(message.channel, limit=100):
