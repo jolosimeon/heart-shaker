@@ -56,7 +56,7 @@ class Keywords:
             if (keywordList.get(word) is not None):
                 cur.execute("UPDATE heartshaker.keywords "
                             "SET value = %s"
-                            "WHERE keyword = %s", (str(value), str(word))
+                            "WHERE keyword = %s", (str(value), str(word)))
                 await self.bot.say("Updated") 
             else:
                 cur.execute("INSERT INTO heartshaker.keywords "
