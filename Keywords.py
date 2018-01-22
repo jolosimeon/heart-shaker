@@ -81,7 +81,7 @@ class Keywords:
             await self.bot.say(word + " does not exist")
         else:
             cur.execute("DELETE FROM heartshaker.keywords "
-                        "WHERE keyword = %s", str(word)
+                        "WHERE keyword = %s", str(word))
             keywordList.pop(word)
 
     async def on_message(self, msg):
