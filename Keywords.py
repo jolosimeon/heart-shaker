@@ -90,6 +90,7 @@ class Keywords:
         if msg.content.startswith('//'):
             word = str(msg)
             if word in forbidden:
+                await self.bot.say("Word is here") 
                 await self.bot.process_commands(msg)
             else:
                 re.sub('//','', word, 1)
