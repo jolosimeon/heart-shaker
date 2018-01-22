@@ -82,7 +82,7 @@ class Keywords:
             await self.bot.say(str(word) + " does not exist")
         else:
             cur.execute("DELETE FROM heartshaker.keywords "
-                        "WHERE keyword = %s", str(word))
+                        "WHERE keyword = %s", word.content)
             keywordList.pop(word)
             await self.bot.say("Command deleted") 
 
