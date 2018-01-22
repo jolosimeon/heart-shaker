@@ -82,7 +82,8 @@ class Keywords:
             await self.bot.say(str(word) + " does not exist")
         else:
             cur.execute("DELETE FROM heartshaker.keywords "
-                        "WHERE keyword = %s", word.content)
+                        "WHERE keyword = %s", (word))
+            print(word)
             keywordList.pop(word)
             await self.bot.say("Command deleted") 
 
@@ -90,7 +91,7 @@ class Keywords:
         if msg.content.startswith('//'):
             word = str(msg)
             if word in forbidden:
-                await self.bot.say("Word is here") 
+                await self.bot.send_message("Word is here") 
                 await self.bot.process_commands(msg)
             else:
                 re.sub('//','', word, 1)
