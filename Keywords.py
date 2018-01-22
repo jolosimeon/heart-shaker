@@ -61,6 +61,7 @@ class Keywords:
             else:
                 cur.execute("INSERT INTO heartshaker.keywords "
                             "VALUES (%s, %s)", (str(word), str(value)))
+                await self.bot.say("New command added") 
             keywordList[word] = value
 
     @commands.command()
@@ -77,12 +78,13 @@ class Keywords:
             await self.bot.say("nothing to remove")
         elif word in forbidden:
             await self.bot.say("cannot remove dat")
-        elif (keywordList.get(word) is None):
-            await self.bot.say(word + " does not exist")
+        elif (keywordList.get(str(word)) is None):
+            await self.bot.say(str(word) + " does not exist")
         else:
             cur.execute("DELETE FROM heartshaker.keywords "
                         "WHERE keyword = %s", str(word))
             keywordList.pop(word)
+            await self.bot.say("Command deleted") 
 
     async def on_message(self, msg):
         if msg.content.startswith('//'):

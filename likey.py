@@ -18,8 +18,9 @@ async def on_ready():
 async def status_loop():
     await bot.wait_until_ready()
     while not bot.is_closed:
-        playing = ["TWICE - Heart Shaker", "TWICE - Likey", "Overwatch", "Fortnite", "League of Legends"]
-        await bot.change_presence(game=discord.Game(name=playing[randint(0, 4)]))
+        playing = ["TWICE - Heart Shaker", "TWICE - Likey", "Overwatch", "Fortnite", "League of Legends", "Deceit", 
+                    "TWICE - TT", "Warframe", "VRChat"]
+        await bot.change_presence(game=discord.Game(name=playing[randint(0, len(playing)-1)]))
         await asyncio.sleep(60)
 
 #async def on_message(message):
