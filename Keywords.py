@@ -40,15 +40,19 @@ class Keywords:
 
     @commands.command()
     async def set(self, word, *, value=None):
-        if value is None:
+        global keywordList
+        if word is None:
+            await self.bot.say("set wat")
+        elif value is None:
             await self.bot.say("wat should I say")
         elif word in forbidden:
-            await self.bot.say("cannot use that command")
+            await self.bot.say("cannot use dat keyword")
         else:
             if (keywordList.get(word) is not None):
                 cur.execute("UPDATE heartshaker.keywords "
                             "SET value = %s"
-                            "WHERE keyword = %s", (value, word)) 
+                            "WHERE keyword = %s", (value, word))
+                await self.bot.say("Updated") 
             else:
                 cur.execute("INSERT INTO heartshaker.keywords "
                             "VALUES (%s, %s)", (word, value))
@@ -57,12 +61,13 @@ class Keywords:
     @commands.command()
     async def view(self):
         viewList = "**Commands:** \n"
-        for key, value in keywordList:
+        for key, value in keywordList.items():
             viewList += "```" + str(key) + ":``` " + str(value) + "\n"
         await self.bot.say(viewList)
     
     @commands.command()
     async def remove(self, word):
+        global keywordList
         if word is None:
             await self.bot.say("nothing to remove")
         elif word in forbidden:
@@ -76,11 +81,13 @@ class Keywords:
 
     async def on_message(self, msg):
         if msg.content.startswith('//'):
-            word = msg
-            re.sub('//','', word, 1)
-            if (keywordList.get(word) is not None):
-                await self.bot.send_message(msg.channel, keywordList[msg], tts=True)
-        await self.bot.process_commands(msg)
-
+            word = str(msg)
+            if word in forbidden:
+                await self.bot.process_commands(msg)
+            else:
+                re.sub('//','', word, 1)
+                if (keywordList.get(word) is not None):
+                    await self.bot.send_message(msg.channel, keywordList[msg], tts=True)
+        
 def setup(bot):
     bot.add_cog(Keywords(bot))
