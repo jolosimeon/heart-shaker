@@ -41,7 +41,7 @@ async def on_message(message):
     #     await asyncio.sleep(5)
     #     await client.send_message(message.channel, 'Done sleeping')
 
-#client.run(os.getenv('TOKEN'))
+client.run(os.getenv('TOKEN'))
 
 # from discord.ext import commands
 
