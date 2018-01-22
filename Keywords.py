@@ -36,6 +36,10 @@ class Keywords:
         keywordList = {}
         for row in resultList:
             keywordList[row[0]] = row[1]
+
+    @commands.command()
+    async def refresh(self)
+        self.loadCommands()
             
 
     @commands.command()
