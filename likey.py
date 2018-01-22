@@ -33,8 +33,9 @@ async def status_loop():
 @bot.event
 async def on_message(msg):
     if msg.content.startswith('//'):
-        word = str(msg)
+        word = msg.content
         re.sub('//','', word, 1)
+        print(word)
         if (keywordList.get(word) is not None):
             await bot.send_message(msg.channel, keywordList[word], tts=True)
         else:
@@ -72,7 +73,7 @@ async def set(word, *, value=None):
             await self.bot.say("New command added") 
         keywordList[word] = value
 
-@commands.command()
+@bot.command()
 async def remove(word):
     global keywordList
     if word is None:
