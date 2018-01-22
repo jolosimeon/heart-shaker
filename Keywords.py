@@ -94,7 +94,7 @@ class Keywords:
             else:
                 re.sub('//','', word, 1)
                 if (keywordList.get(word) is not None):
-                    await self.bot.send_message(msg.channel, keywordList[msg], tts=True)
+                    await self.bot.send_message(msg.channel, keywordList[word], tts=True)
         
 def setup(bot):
     bot.add_cog(Keywords(bot))
