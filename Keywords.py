@@ -60,7 +60,7 @@ class Keywords:
                 await self.bot.say("Updated") 
             else:
                 cur.execute("INSERT INTO heartshaker.keywords "
-                            "VALUES (%s, %s)", (str(word), str(value))
+                            "VALUES (%s, %s)", (str(word), str(value)))
             keywordList[word] = value
 
     @commands.command()
