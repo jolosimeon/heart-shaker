@@ -14,7 +14,7 @@ async def on_ready():
     print("I'm ready!")
 
 @bot.event 
-async def on_message(message)
+async def on_message(message):
     await bot.send_message(message.channel, 'sollenda me likey likey', tts=True)
 
 ##bot.run(os.getenv('TOKEN'))
