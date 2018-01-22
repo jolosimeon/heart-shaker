@@ -66,7 +66,7 @@ class Keywords:
     async def view(self):
         viewList = "**Commands:** \n"
         for key, value in keywordList.items():
-            viewList += "```" + str(key) + ":``` " + str(value) + "\n"
+            viewList += "`" + str(key) + "` " + str(value) + "\n"
         await self.bot.say(viewList)
     
     @commands.command()
