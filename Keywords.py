@@ -25,6 +25,7 @@ class Keywords:
             host=url.hostname,
             port=url.port
         )
+        conn.autocommit = True
         global cur
         cur = conn.cursor()
     
@@ -55,11 +56,11 @@ class Keywords:
             if (keywordList.get(word) is not None):
                 cur.execute("UPDATE heartshaker.keywords "
                             "SET value = %s"
-                            "WHERE keyword = %s", (value, word))
+                            "WHERE keyword = %s", (str(value), str(word))
                 await self.bot.say("Updated") 
             else:
                 cur.execute("INSERT INTO heartshaker.keywords "
-                            "VALUES (%s, %s)", (word, value))
+                            "VALUES (%s, %s)", (str(word), str(value))
             keywordList[word] = value
 
     @commands.command()
@@ -80,7 +81,7 @@ class Keywords:
             await self.bot.say(word + " does not exist")
         else:
             cur.execute("DELETE FROM heartshaker.keywords "
-                        "WHERE keyword = %s", word)
+                        "WHERE keyword = %s", str(word)
             keywordList.pop(word)
 
     async def on_message(self, msg):
