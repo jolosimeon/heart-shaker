@@ -11,7 +11,7 @@ import re
 prefix = "//"
 keywordList = {}
 cur = None
-forbidden = {'set', 'remove'}
+forbidden = {'keyword', 'remove'}
 possible = {'refresh', 'view'}
 bot = commands.Bot(command_prefix=prefix, description="you're my heart shaker shaker")
 
@@ -54,11 +54,15 @@ async def on_message(msg):
         await bot.add_reaction(msg, ':jaylicaeat:367384830981177344')
         await bot.add_reaction(msg, ':baldippray:365815736095997952')
 
+class General_Commands():
+    def __init__(self, bot):
+        self.bot = bot
+
 @bot.command()
 async def refresh():
     """Re-fetch commands from database"""
     loadCommands()
-    await bot.say("Commands have been refreshed")
+    await bot.say("commands refreshed")
 
 @bot.command()
 async def view():
@@ -69,25 +73,27 @@ async def view():
     await bot.say(viewList)
 
 @bot.command()
-async def set(word=None, *, value=None):
+async def keyword(word=None, *, value=None):
     """Set or update a new command"""
     global keywordList
     if word is None:
-        await bot.say("set wat")
+        await bot.say("wat u want")
     elif value is None:
         await bot.say("wat should I say")
     elif word in forbidden or word in possible:
         await bot.say("cannot use dat keyword")
+    elif value.startswith(prefix):
+        await bot.say("cannot make me say words wid prefix")
     else:
-        if (keywordList.get(word) is not None):
+        if keywordList.get(word) is not None:
             cur.execute("UPDATE heartshaker.keywords "
                         "SET value = %s"
-                        "WHERE keyword = %s", (str(value), str(word)))
-            await bot.say("Updated") 
+                        "WHERE keyword = %s", (value, word))
+            await bot.say("Updated")
         else:
             cur.execute("INSERT INTO heartshaker.keywords "
-                        "VALUES (%s, %s)", (str(word), str(value)))
-            await bot.say("New command added") 
+                        "VALUES (%s, %s)", (word, value))
+            await bot.say("New command added")
         keywordList[word] = value
 
 @bot.command()
@@ -98,13 +104,13 @@ async def remove(word=None):
         await bot.say("nothing to remove")
     elif word in forbidden or word in possible:
         await bot.say("cannot remove dat")
-    elif (keywordList.get(str(word)) is None):
-        await bot.say(str(word) + " does not exist")
+    elif (keywordList.get(word) is None):
+        await bot.say(word + " does not exist")
     else:
         cur.execute("DELETE FROM heartshaker.keywords "
                     "WHERE keyword = %s", (word,))
         keywordList.pop(word)
-        await bot.say("Command deleted") 
+        await bot.say("command deleted") 
 
 def initCon():
     parse.uses_netloc.append("postgres")
