@@ -20,6 +20,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
     #bot.load_extension("Keywords")
+    loadCommands()
     await bot.change_presence(game=discord.Game(name='TWICE - Heart Shaker'))
 
 async def status_loop():
@@ -53,7 +54,7 @@ async def view():
     await bot.say(viewList)
 
 @bot.command()
-async def set(word, *, value=None):
+async def set(word=None, *, value=None):
     global keywordList
     if word is None:
         await bot.say("set wat")
@@ -74,7 +75,7 @@ async def set(word, *, value=None):
         keywordList[word] = value
 
 @bot.command()
-async def remove(word):
+async def remove(word=None):
     global keywordList
     if word is None:
         await bot.say("nothing to remove")
@@ -85,7 +86,7 @@ async def remove(word):
     else:
         print(word)
         cur.execute("DELETE FROM heartshaker.keywords "
-                    "WHERE keyword = %s", (word))
+                    "WHERE keyword = %s", (word,))
         keywordList.pop(word)
         await bot.say("Command deleted") 
 
