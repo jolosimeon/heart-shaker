@@ -44,15 +44,15 @@ async def on_message(msg):
             word = word.split(" ", 1)[0]
             if (word in forbidden):
                 #Check if user has permission
-                if (msg.channel.permissions_for(msg.author).administrator()):
+                if (msg.channel.permissions_for(msg.author).administrator):
                     await bot.process_commands(msg)
                 else:
                     await bot.say("need to be admin to use")
             else:
                 await bot.process_commands(msg)
     elif "nsfw" in msg.content:
-        msg.add_reaction("<:jaylicaeat:367384830981177344>")
-        msg.add_reaction("<:baldippray:365815736095997952>")
+        bot.add_reaction(msg, "<:jaylicaeat:367384830981177344>")
+        bot.add_reaction(msg, "<:baldippray:365815736095997952>")
 
 @bot.command()
 async def refresh():
