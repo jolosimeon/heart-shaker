@@ -52,7 +52,7 @@ async def on_message(msg):
                 await bot.process_commands(msg)
     elif "nsfw" in msg.content:
         await bot.add_reaction(msg, "👌")
-        await bot.add_reaction(msg, "<:baldippray:365815736095997952>")
+        await bot.send_message(msg.channel, '<:baldippray:365815736095997952>')
 
 @bot.command()
 async def refresh():
