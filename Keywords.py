@@ -90,6 +90,7 @@ class Keywords:
     async def on_message(self, msg):
         if msg.content.startswith('//'):
             word = str(msg)
+            print(word)
             if word in forbidden:
                 await self.bot.send_message("Word is here") 
                 await self.bot.process_commands(msg)
