@@ -133,4 +133,4 @@ def loadCommands():
 
 ##bot.run(os.getenv('TOKEN'))
 bot.loop.create_task(status_loop())
-bot.run(os.getenv('DEV-TOKEN'))
+bot.run(os.getenv('TOKEN'))
