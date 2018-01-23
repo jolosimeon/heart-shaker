@@ -51,8 +51,8 @@ async def on_message(msg):
             else:
                 await bot.process_commands(msg)
     elif "nsfw" in msg.content:
-        bot.add_reaction(msg, "<:jaylicaeat:367384830981177344>")
-        bot.add_reaction(msg, "<:baldippray:365815736095997952>")
+        await bot.add_reaction(msg, "<:jaylicaeat:367384830981177344>")
+        await bot.add_reaction(msg, "<:baldippray:365815736095997952>")
 
 @bot.command()
 async def refresh():
