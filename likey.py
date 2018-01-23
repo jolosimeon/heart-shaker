@@ -42,7 +42,7 @@ async def on_message(msg):
             await bot.send_message(msg.channel, keywordList[word], tts=True)
         elif (word.isdigit()):
             if (int(word) > 0 and int(word) <= 60):
-                await bot.say("wait " + word + " minutes")
+                await bot.send_message(msg.channel, "wait " + word + " minutes", tts=True)
         else:
             word = word.split(" ", 1)[0]
             if (word in forbidden):
