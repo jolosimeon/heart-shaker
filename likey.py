@@ -14,6 +14,7 @@ forbidden = {'keyword', 'remove'}
 possible = {'refresh', 'view'}
 bot = commands.Bot(command_prefix=prefix, description="you're my heart shaker shaker")
 bot.remove_command('help')
+
 @bot.event
 async def on_ready():
     print('Logged in as')
@@ -64,15 +65,15 @@ async def refresh():
     loadCommands()
     await bot.say("commands refreshed")
 
-@bot.command()
-async def view(msg):
+@bot.command(pass_context=True)
+async def view(ctx):
     """View list of available commands."""
-    viewHelp(msg)
+    viewHelp(ctx)
 
-@bot.command()
-async def help(msg):
+@bot.command(pass_context=True)
+async def help(ctx):
     """View list of available commands."""
-    viewHelp(msg)
+    viewHelp(ctx)
 
 @bot.command()
 async def keyword(word=None, *, value=None):
@@ -137,7 +138,7 @@ def loadCommands():
     for row in resultList:
         keywordList[row[0]] = row[1]
 
-async def viewHelp(msg):
+async def viewHelp(ctx):
     viewList = "**Commands:** \n"
     viewList += "`keyword <word/string> <value>` set or update a new command\n"
     viewList += "`remove <word/string>` remove a command\n"
@@ -145,7 +146,7 @@ async def viewHelp(msg):
     viewList += "**Custom Commands:**"
     for key, value in keywordList.items():
         viewList += "`" + str(key) + "` " + str(value) + "\n"
-    await bot.send_message(msg.channel, viewList)
+    await bot.send_message(ctx.message.channel, viewList)
 
 ##bot.run(os.getenv('TOKEN'))
 bot.loop.create_task(status_loop())
