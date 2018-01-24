@@ -13,7 +13,7 @@ cur = None
 forbidden = {'keyword', 'remove'}
 possible = {'refresh', 'view'}
 bot = commands.Bot(command_prefix=prefix, description="you're my heart shaker shaker")
-
+bot.remove_command('help')
 @bot.event
 async def on_ready():
     print('Logged in as')
