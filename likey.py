@@ -68,12 +68,12 @@ async def refresh():
 @bot.command(pass_context=True)
 async def view(ctx):
     """View list of available commands."""
-    viewHelp(ctx)
+    await viewHelp(ctx)
 
 @bot.command(pass_context=True)
 async def help(ctx):
     """View list of available commands."""
-    viewHelp(ctx)
+    await viewHelp(ctx)
 
 @bot.command()
 async def keyword(word=None, *, value=None):
