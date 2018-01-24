@@ -139,11 +139,11 @@ def loadCommands():
         keywordList[row[0]] = row[1]
 
 async def viewHelp(ctx):
-    viewList = "**Commands:** \n"
+    viewList = "**Commands:**\n"
     viewList += "`keyword <word/string> <value>` set or update a new command\n"
     viewList += "`remove <word/string>` remove a command\n"
     viewList += "`<integer 1-60>` wait _ minutes\n\n"
-    viewList += "**Custom Commands:**"
+    viewList += "**Custom Commands:**\n"
     for key, value in keywordList.items():
         viewList += "`" + str(key) + "` " + str(value) + "\n"
     await bot.send_message(ctx.message.channel, viewList)
