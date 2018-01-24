@@ -1,12 +1,11 @@
-import discord
+from urllib import parse
+from random import randint
 import asyncio
 import os
-from random import randint 
-from discord.ext import commands
-
-from urllib import parse
-import psycopg2
 import re
+import psycopg2
+from discord.ext import commands
+import discord
 
 prefix = "//"
 keywordList = {}
@@ -59,10 +58,6 @@ async def on_message(msg):
         await bot.add_reaction(msg, ':jaylicaeat:367384830981177344')
         await bot.add_reaction(msg, ':baldippray:365815736095997952')
 
-class General_Commands():
-    def __init__(self, bot):
-        self.bot = bot
-
 @bot.command()
 async def refresh():
     """Re-fetch commands from database"""
@@ -70,12 +65,14 @@ async def refresh():
     await bot.say("commands refreshed")
 
 @bot.command()
-async def view():
+async def view(msg):
     """View list of available commands."""
-    viewList = "**Commands:** \n"
-    for key, value in keywordList.items():
-        viewList += "`" + str(key) + "` " + str(value) + "\n"
-    await bot.say(viewList)
+    viewHelp(msg)
+
+@bot.command()
+async def help(msg):
+    """View list of available commands."""
+    viewHelp(msg)
 
 @bot.command()
 async def keyword(word=None, *, value=None):
@@ -139,8 +136,16 @@ def loadCommands():
     keywordList = {}
     for row in resultList:
         keywordList[row[0]] = row[1]
-#async def on_message(message):
-    ##await bot.send_message(message.channel, 'sollenda me likey likey', tts=True)
+
+async def viewHelp(msg):
+    viewList = "**Commands:** \n"
+    viewList += "`keyword <word/string> <value>` set or update a new command\n"
+    viewList += "`remove <word/string>` remove a command\n"
+    viewList += "`<integer 1-60>` wait _ minutes\n\n"
+    viewList += "**Custom Commands:**"
+    for key, value in keywordList.items():
+        viewList += "`" + str(key) + "` " + str(value) + "\n"
+    await bot.send_message(msg.channel, viewList)
 
 ##bot.run(os.getenv('TOKEN'))
 bot.loop.create_task(status_loop())
