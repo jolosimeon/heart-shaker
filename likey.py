@@ -154,7 +154,7 @@ async def viewHelp(ctx):
     await bot.send_message(ctx.message.channel, viewList)
 
 def cleanValue(value):
-    words = value.split[' ']
+    words = value.split(' ')
     newValue = ''
     for word in words:
         if checkIfUrl(word):
