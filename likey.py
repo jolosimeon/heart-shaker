@@ -39,7 +39,10 @@ async def on_message(msg):
         word = msg.content
         word = re.sub(prefix,'', word, 1)
         if (keywordList.get(word) is not None):
-            await bot.send_message(msg.channel, keywordList[word], tts=True)
+            talk = True
+            if (checkIfUrl(keywordList[word])):
+                talk = False
+            await bot.send_message(msg.channel, keywordList[word], tts=talk)
         elif (word.isdigit()):
             if  (int(word) == 1):
                  await bot.send_message(msg.channel, "wait " + word + " minute", tts=True)
@@ -145,8 +148,32 @@ async def viewHelp(ctx):
     viewList += "`<integer 1-60>` wait _ minutes\n\n"
     viewList += "**Custom Commands:**\n"
     for key, value in keywordList.items():
+        if (checkIfUrl(value)):
+            value = cleanValue(value)
         viewList += "`" + str(key) + "` " + str(value) + "\n"
     await bot.send_message(ctx.message.channel, viewList)
+
+def cleanValue(value):
+    words = value.split[' ']
+    newValue = ''
+    for word in words:
+        if checkIfUrl(word):
+            word = "<" + word + ">"
+            newValue += word
+    return newValue
+
+def checkIfUrl(url):
+    pattern = re.compile(
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    if (pattern.search(url) is not None):
+        return True
+    else:
+        return False
 
 ##bot.run(os.getenv('TOKEN'))
 bot.loop.create_task(status_loop())
