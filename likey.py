@@ -10,10 +10,14 @@ import discord
 prefix = "//"
 keywordList = {}
 cur = None
-forbidden = {'keyword', 'remove'}
-possible = {'refresh', 'view'}
+forbidden = ['keyword', 'remove', 'refresh', 'view', 'morehelp', 'tulog']
 bot = commands.Bot(command_prefix=prefix, description="you're my heart shaker shaker")
 bot.remove_command('help')
+nsfwTrigger = False
+unsafeMsg = None
+helpID = None
+page = 0
+perPage = 15
 
 @bot.event
 async def on_ready():
@@ -35,6 +39,8 @@ async def status_loop():
 
 @bot.event
 async def on_message(msg):
+    # global nsfwTrigger
+    # global unsafeMsg
     if msg.content.startswith(prefix):
         word = msg.content
         word = re.sub(prefix,'', word, 1)
@@ -42,7 +48,9 @@ async def on_message(msg):
             talk = True
             if (checkIfUrl(keywordList[word])):
                 talk = False
+            bot.change_nickname(bot.user, msg.author.nick)
             await bot.send_message(msg.channel, keywordList[word], tts=talk)
+            bot.change_nickname(bot.user, "heart shaker")
         elif (word.isdigit()):
             if  (int(word) == 1):
                  await bot.send_message(msg.channel, "wait " + word + " minute", tts=True)
@@ -59,8 +67,15 @@ async def on_message(msg):
             else:
                 await bot.process_commands(msg)
     elif "nsfw" in msg.content:
+        nsfwTrigger = True
         await bot.add_reaction(msg, ':jaylicaeat:367384830981177344')
         await bot.add_reaction(msg, ':baldippray:365815736095997952')
+    # elif nsfwTrigger is True and msg.author.id == '232916519594491906' and unsafeMsg is None:
+    #     unsafeMsg = msg
+    #     nsfwTrigger = False
+    # if msg.content == '<:jaylicaeat:367384830981177344>':
+    #     await bot.delete_message(unsafeMsg)
+    #     unsafeMsg = None
 
 @bot.command()
 async def refresh():
@@ -78,6 +93,14 @@ async def help(ctx):
     """View list of available commands."""
     await viewHelp(ctx)
 
+@bot.command(pass_context=True)
+async def tulog(ctx, name=None):
+    if name is not None:
+        tulog = "Tulog nah " + name
+        await bot.send_message(ctx.message.channel, tulog, tts=True)
+    else:
+        await bot.say("sino matutulog")
+
 @bot.command()
 async def keyword(word=None, *, value=None):
     """Set or update a new command"""
@@ -86,7 +109,7 @@ async def keyword(word=None, *, value=None):
         await bot.say("wat u want")
     elif value is None:
         await bot.say("wat should I say")
-    elif word in forbidden or word in possible:
+    elif word in forbidden:
         await bot.say("cannot use dat keyword")
     elif value.startswith(prefix):
         await bot.say("cannot make me say words wid prefix")
@@ -108,7 +131,7 @@ async def remove(word=None):
     global keywordList
     if word is None:
         await bot.say("nothing to remove")
-    elif word in forbidden or word in possible:
+    elif word in forbidden:
         await bot.say("cannot remove dat")
     elif (keywordList.get(word) is None):
         await bot.say(word + " does not exist")
@@ -142,16 +165,61 @@ def loadCommands():
         keywordList[row[0]] = row[1]
 
 async def viewHelp(ctx):
-    viewList = "**Commands:**\n"
-    viewList += "`keyword <word/string> <value>` set or update a new command\n"
-    viewList += "`remove <word/string>` remove a command\n"
-    viewList += "`<integer 1-60>` wait _ minutes\n\n"
-    viewList += "**Custom Commands:**\n"
-    for key, value in keywordList.items():
-        if (checkIfUrl(value)):
+    msg = await makeHelp()
+    await bot.add_reaction(msg, "⬅")
+    await bot.add_reaction(msg, "➡")
+
+    global helpID
+    if helpID is not None:
+        try:
+            msg = await bot.get_message(ctx.channel, msg.id)
+            bot.clear_reactions(msg)
+        except Exception:
+            pass
+    helpID = msg.id
+
+async def makeHelp():
+    viewList = "Use `morehelp` for other commands\n\n"
+    i = page * perPage
+    while i < page * (perPage + 1) and i < len(keywordList):
+        key = list(keywordList.keys())[i]
+        value = list(keywordList.values())[i]
+        if checkIfUrl(value):
             value = cleanValue(value)
         viewList += "`" + str(key) + "` " + str(value) + "\n"
+        i += 1
+    numPages = len(keywordList)/perPage
+    if len(keywordList) % numPages > 0:
+        numPages += 1
+    embed = discord.Embed(title="Custom Commands", colour=discord.Colour(0xa64ae2), description=viewList)
+    embed.set_footer(text="Page " + (page + 1) + "/" + numPages)
+    return embed
+
+@bot.command(pass_context=True)
+async def morehelp(ctx):
+    viewList = "**Commands:**\n"
+    viewList += "`Prefix: " + prefix + "`\n"
+    viewList += "`keyword <word/string> <value>` set or update a new command\n"
+    viewList += "`remove <word/string>` remove a command\n"
+    viewList += "`<integer 1-60>` wait ___ minutes\n\n"
+    viewList += "`tulog <string>` Tulog nah ___"
     await bot.send_message(ctx.message.channel, viewList)
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    msg = reaction.message
+    channel = reaction.message.channel
+    global page
+    numPages = len(keywordList)/perPage
+    if len(keywordList) % numPages > 0:
+        numPages += 1 
+    if reaction.emoji == "⬅" and msg.id == helpID and not reaction.me:
+        if page - 1 >= 0:
+            page -= 1
+            msg = await bot.get_message(msg.channel, helpID)
+            embed = await makeHelp()
+            bot.edit_message(msg, embed)
+
 
 def cleanValue(value):
     words = value.split(' ')
