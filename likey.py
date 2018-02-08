@@ -45,11 +45,11 @@ async def on_message(msg):
         word = msg.content
         word = re.sub(prefix,'', word, 1)
         if (keywordList.get(word) is not None):
-            talk = False
+            talk = True
             if (checkIfUrl(keywordList[word])):
                 talk = False
             print (msg.author.name)
-            bot.change_nickname(msg.author, "test")
+            await bot.change_nickname(bot.user, "test")
             await bot.send_message(msg.channel, keywordList[word], tts=talk)
             #bot.change_nickname(bot.user, "heart shaker")
         elif (word.isdigit()):
