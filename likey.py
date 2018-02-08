@@ -48,11 +48,10 @@ async def on_message(msg):
             talk = True
             if (checkIfUrl(keywordList[word])):
                 talk = False
-            print (msg.author.name)
             me = msg.channel.server.me
-            await bot.change_nickname(me, "test")
+            await bot.change_nickname(me, msg.author.name)
             await bot.send_message(msg.channel, keywordList[word], tts=talk)
-            #bot.change_nickname(bot.user, "heart shaker")
+            await bot.change_nickname(me, "heart shaker")
         elif (word.isdigit()):
             if  (int(word) == 1):
                  await bot.send_message(msg.channel, "wait " + word + " minute", tts=True)
