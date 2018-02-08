@@ -48,15 +48,12 @@ async def on_message(msg):
             talk = True
             if (checkIfUrl(keywordList[word])):
                 talk = False
-            me = msg.channel.server.me
-            await bot.change_nickname(me, msg.author.name)
-            await bot.send_message(msg.channel, keywordList[word], tts=talk)
-            await bot.change_nickname(me, "heart shaker")
+            sendWithAuthor(msg, keywordList[word], talk)
         elif (word.isdigit()):
             if  (int(word) == 1):
-                 await bot.send_message(msg.channel, "wait " + word + " minute", tts=True)
+                sendWithAuthor(msg, "wait " + word + " minute", True)
             elif (int(word) > 1 and int(word) <= 60):
-                await bot.send_message(msg.channel, "wait " + word + " minutes", tts=True)
+                sendWithAuthor(msg, "wait " + word + " minutes", True)
         else:
             word = word.split(" ", 1)[0]
             if (word in forbidden):
@@ -85,22 +82,19 @@ async def refresh():
     await bot.say("commands refreshed")
 
 @bot.command(pass_context=True)
-async def view(ctx):
-    """View list of available commands."""
-    await viewHelp(ctx)
-
-@bot.command(pass_context=True)
-async def help(ctx):
-    """View list of available commands."""
-    await viewHelp(ctx)
-
-@bot.command(pass_context=True)
 async def tulog(ctx, name=None):
     if name is not None:
         tulog = "Tulog nah " + name
-        await bot.send_message(ctx.message.channel, tulog, tts=True)
+        sendWithAuthor(ctx.message, tulog, True)
     else:
         await bot.say("sino matutulog")
+
+async def sendWithAuthor(msg, content, talk):
+    me = msg.channel.server.me
+    if talk: 
+        await bot.change_nickname(me, msg.author.name)
+    await bot.send_message(msg.channel, content, tts=talk)
+    await bot.change_nickname(me, "heart shaker")
 
 @bot.command()
 async def keyword(word=None, *, value=None):
@@ -165,6 +159,16 @@ def loadCommands():
     for row in resultList:
         keywordList[row[0]] = row[1]
 
+@bot.command(pass_context=True)
+async def view(ctx):
+    """View list of available commands."""
+    await viewHelp(ctx)
+
+@bot.command(pass_context=True)
+async def help(ctx):
+    """View list of available commands."""
+    await viewHelp(ctx)
+
 async def viewHelp(ctx):
     msg = await makeHelp()
     await bot.add_reaction(msg, "⬅")
@@ -220,7 +224,6 @@ async def on_reaction_add(reaction, user):
             msg = await bot.get_message(msg.channel, helpID)
             embed = await makeHelp()
             bot.edit_message(msg, embed)
-
 
 def cleanValue(value):
     words = value.split(' ')
