@@ -170,6 +170,18 @@ async def help(ctx):
     await viewHelp(ctx)
 
 async def viewHelp(ctx):
+    viewList = "**Commands:**\n"
+    viewList += "`keyword <word/string> <value>` set or update a new command\n"
+    viewList += "`remove <word/string>` remove a command\n"
+    viewList += "`<integer 1-60>` wait _ minutes\n\n"
+    viewList += "**Custom Commands:**\n"
+    for key, value in keywordList.items():
+        if (checkIfUrl(value)):
+            value = cleanValue(value)
+        viewList += "`" + str(key) + "` " + str(value) + "\n"
+    await bot.send_message(ctx.message.channel, viewList)
+
+async def viewAltHelp(ctx):
     msg = await makeHelp()
     await bot.add_reaction(msg, "⬅")
     await bot.add_reaction(msg, "➡")
@@ -203,10 +215,10 @@ async def makeHelp():
 @bot.command(pass_context=True)
 async def morehelp(ctx):
     viewList = "**Commands:**\n"
-    viewList += "`Prefix: " + prefix + "`\n"
+    viewList += "`Prefix:` " + prefix + "\n"
     viewList += "`keyword <word/string> <value>` set or update a new command\n"
     viewList += "`remove <word/string>` remove a command\n"
-    viewList += "`<integer 1-60>` wait ___ minutes\n\n"
+    viewList += "`<integer 1-60>` wait ___ minutes\n"
     viewList += "`tulog <string>` Tulog nah ___"
     await bot.send_message(ctx.message.channel, viewList)
 
