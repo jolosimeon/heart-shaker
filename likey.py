@@ -48,12 +48,12 @@ async def on_message(msg):
             talk = True
             if (checkIfUrl(keywordList[word])):
                 talk = False
-            sendWithAuthor(msg, keywordList[word], talk)
+            await sendWithAuthor(msg, keywordList[word], talk)
         elif (word.isdigit()):
             if  (int(word) == 1):
-                sendWithAuthor(msg, "wait " + word + " minute", True)
+                await sendWithAuthor(msg, "wait " + word + " minute", True)
             elif (int(word) > 1 and int(word) <= 60):
-                sendWithAuthor(msg, "wait " + word + " minutes", True)
+                await sendWithAuthor(msg, "wait " + word + " minutes", True)
         else:
             word = word.split(" ", 1)[0]
             if (word in forbidden):
@@ -85,7 +85,7 @@ async def refresh():
 async def tulog(ctx, name=None):
     if name is not None:
         tulog = "Tulog nah " + name
-        sendWithAuthor(ctx.message, tulog, True)
+        await sendWithAuthor(ctx.message, tulog, True)
     else:
         await bot.say("sino matutulog")
 
