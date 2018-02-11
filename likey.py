@@ -174,6 +174,7 @@ async def viewHelp(ctx):
     viewList += "`keyword <word/string> <value>` set or update a new command\n"
     viewList += "`remove <word/string>` remove a command\n"
     viewList += "`<integer 1-60>` wait _ minutes\n\n"
+    viewList += "`tulog <string>` Tulog nah ___"
     viewList += "**Custom Commands:**\n"
     for key, value in keywordList.items():
         if (checkIfUrl(value)):
