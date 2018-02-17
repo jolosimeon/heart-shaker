@@ -92,7 +92,7 @@ async def tulog(ctx, name=None):
 async def sendWithAuthor(msg, content, talk):
     me = msg.channel.server.me
     if talk: 
-        await bot.change_nickname(me, msg.author.name)
+        await bot.change_nickname(me, msg.author.display_name)
     await bot.send_message(msg.channel, content, tts=talk)
     await bot.change_nickname(me, "heart shaker")
 
