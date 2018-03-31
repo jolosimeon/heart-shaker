@@ -1,2 +1,2 @@
-# heart-shaker
-bot for s17 server hohoho
+# Heart Shaker Bot
+Bot for S17 Discord Server
