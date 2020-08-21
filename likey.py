@@ -27,14 +27,14 @@ async def on_ready():
     print('------')
     #bot.load_extension("Keywords")
     loadCommands()
-    await bot.change_presence(game=discord.Game(name='TWICE - Heart Shaker'))
+    await bot.change_presence(activity=discord.Game(name='TWICE - Heart Shaker'))
 
 async def status_loop():
     await bot.wait_until_ready()
     while not bot.is_closed:
-        playing = ["TWICE - Heart Shaker", "TWICE - Likey", "Overwatch", "Fortnite", "League of Legends", "Deceit", 
-                    "TWICE - TT", "Warframe", "VRChat", "Runescape 3", "Doki Doki Literature Club!"]
-        await bot.change_presence(game=discord.Game(name=playing[randint(0, len(playing)-1)]))
+        playing = ["TWICE - Heart Shaker", "TWICE - Fancy", "VALORANT", "League of Legends", "Among Us", 
+                    "TWICE - TT", "TWICE - More & More", "VRChat", "Old School Runescape", "Doki Doki Literature Club!"]
+        await bot.change_presence(activity=discord.Game(name=playing[randint(0, len(playing)-1)]))
         await asyncio.sleep(60)
 
 @bot.event
