@@ -61,7 +61,7 @@ async def on_message(msg):
                 #if (msg.channel.permissions_for(msg.author).administrator):
                 await bot.process_commands(msg)
                 #else:
-                    #await bot.send_message(msg.channel, "need to be admin to use")
+                    #await bot.send(msg.channel, "need to be admin to use")
             else:
                 await bot.process_commands(msg)
     elif "nsfw" in msg.content:
@@ -76,65 +76,65 @@ async def on_message(msg):
     #     unsafeMsg = None
 
 @bot.command()
-async def refresh():
+async def refresh(ctx):
     """Re-fetch commands from database"""
     loadCommands()
-    await bot.say("commands refreshed")
+    await ctx.send("commands refreshed")
 
-@bot.command(pass_context=True)
+@bot.command()
 async def tulog(ctx, name=None):
     if name is not None:
         tulog = "Tulog nah " + name
         await sendWithAuthor(ctx.message, tulog, True)
     else:
-        await bot.say("sino matutulog")
+        await ctx.send("sino matutulog")
 
 async def sendWithAuthor(msg, content, talk):
-    me = msg.channel.server.me
+    me = msg.guild.me
     if talk: 
-        await bot.change_nickname(me, msg.author.display_name)
-    await bot.send_message(msg.channel, content, tts=talk)
-    await bot.change_nickname(me, "heart shaker")
+        await me.edit(nick=msg.author.display_name)
+    await bot.send(msg.channel, content, tts=talk)
+    await me.edit(nick="heart shaker")
 
 @bot.command()
-async def keyword(word=None, *, value=None):
+async def keyword(ctx, word=None, *, value=None):
     """Set or update a new command"""
     global keywordList
     if word is None:
-        await bot.say("wat u want")
+        await ctx.send("wat u want")
     elif value is None:
-        await bot.say("wat should I say")
+        await ctx.send("wat should I say")
     elif word in forbidden:
-        await bot.say("cannot use dat keyword")
+        await ctx.send("cannot use dat keyword")
     elif value.startswith(prefix):
-        await bot.say("cannot make me say words wid prefix")
+        await ctx.send("cannot make me say words with prefix")
     else:
         if keywordList.get(word) is not None:
             cur.execute("UPDATE heartshaker.keywords "
                         "SET value = %s"
                         "WHERE keyword = %s", (value, word))
-            await bot.say("Updated")
+            await ctx.send("Updated")
         else:
             cur.execute("INSERT INTO heartshaker.keywords "
                         "VALUES (%s, %s)", (word, value))
-            await bot.say("New command added")
+            await ctx.send("New command added")
         keywordList[word] = value
 
 @bot.command()
-async def remove(word=None):
+async def remove(ctx, word=None):
     """Remove a command"""
     global keywordList
     if word is None:
-        await bot.say("nothing to remove")
+        await ctx.send("nothing to remove")
     elif word in forbidden:
-        await bot.say("cannot remove dat")
+        await ctx.send("cannot remove dat")
     elif (keywordList.get(word) is None):
-        await bot.say(word + " does not exist")
+        await ctx.send(word + " does not exist")
     else:
         cur.execute("DELETE FROM heartshaker.keywords "
                     "WHERE keyword = %s", (word,))
         keywordList.pop(word)
-        await bot.say("command deleted") 
+        await ctx.send("command deleted") 
 
 def initCon():
     parse.uses_netloc.append("postgres")
@@ -180,7 +180,7 @@ async def viewHelp(ctx):
         if (checkIfUrl(value)):
             value = cleanValue(value)
         viewList += "`" + str(key) + "` " + str(value) + "\n"
-    await bot.send_message(ctx.message.channel, viewList)
+    await bot.send(ctx.message.channel, viewList)
 
 async def viewAltHelp(ctx):
     msg = await makeHelp()
@@ -190,8 +190,8 @@ async def viewAltHelp(ctx):
     global helpID
     if helpID is not None:
         try:
-            msg = await bot.get_message(ctx.channel, msg.id)
-            bot.clear_reactions(msg)
+            #TODO: migrate this msg = await bot.get_message(ctx.channel, msg.id)
+            msg.clear_reactions()
         except Exception:
             pass
     helpID = msg.id
@@ -221,7 +221,7 @@ async def morehelp(ctx):
     viewList += "`remove <word/string>` remove a command\n"
     viewList += "`<integer 1-60>` wait ___ minutes\n"
     viewList += "`tulog <string>` Tulog nah ___"
-    await bot.send_message(ctx.message.channel, viewList)
+    await bot.send(ctx.message.channel, viewList)
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -234,9 +234,9 @@ async def on_reaction_add(reaction, user):
     if reaction.emoji == "⬅" and msg.id == helpID and not reaction.me:
         if page - 1 >= 0:
             page -= 1
-            msg = await bot.get_message(msg.channel, helpID)
+            #TODO: migrate this msg = await bot.get_message(msg.channel, helpID)
             embed = await makeHelp()
-            bot.edit_message(msg, embed)
+            #TODO: migrate this bot.edit_message(msg, embed)
 
 def cleanValue(value):
     words = value.split(' ')
