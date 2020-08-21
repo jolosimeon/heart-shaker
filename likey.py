@@ -93,7 +93,7 @@ async def sendWithAuthor(msg, content, talk):
     me = msg.guild.me
     if talk: 
         await me.edit(nick=msg.author.display_name)
-    await bot.send(msg.channel, content, tts=talk)
+    await msg.channel.send(content, tts=talk)
     await me.edit(nick="heart shaker")
 
 @bot.command()
@@ -180,7 +180,7 @@ async def viewHelp(ctx):
         if (checkIfUrl(value)):
             value = cleanValue(value)
         viewList += "`" + str(key) + "` " + str(value) + "\n"
-    await bot.send(ctx.message.channel, viewList)
+    await ctx.message.channel.send(viewList)
 
 async def viewAltHelp(ctx):
     msg = await makeHelp()
