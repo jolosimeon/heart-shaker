@@ -2,12 +2,18 @@ from urllib import parse
 from random import randint
 import asyncio
 import os
+from dotenv import load_dotenv
 import re
 import psycopg2
 from discord.ext import commands
 import discord
 
+load_dotenv()
+
 prefix = "//"
+
+if os.getenv('PYTHON_ENV') == 'dev':
+    prefix = "/?"
 keywordList = {}
 cur = None
 forbidden = ['keyword', 'remove', 'refresh', 'view', 'morehelp', 'tulog']

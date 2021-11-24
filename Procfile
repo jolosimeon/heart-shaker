@@ -1,2 +1,2 @@
 worker: python likey.py
-web: node app.js
+web: node server/app.js
