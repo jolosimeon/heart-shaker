@@ -12,7 +12,7 @@ const client = new Client({
 client.connect();
 
 app.get('/', (req, res) => {
- res.send(JSON.stringify({ Hello: 'heart-shaker'}));
+ res.send(JSON.stringify({ Hello: 'heart-shaker', 'Message': 'Why do i have a web server? Idk something useful in the future maybe'}));
 });
 
 app.get('/user', (req, res) => {
